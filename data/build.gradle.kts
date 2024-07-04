@@ -1,22 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.swm.mobile"
+    namespace = "com.swm.data"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.swm.mobile"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -38,15 +35,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":presentation"))
-    implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation(libs.retrofit)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
+    implementation(libs.retrofit.gson.converter)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
