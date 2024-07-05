@@ -32,10 +32,15 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
 }
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data")) // for test
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
