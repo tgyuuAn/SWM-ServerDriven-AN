@@ -13,6 +13,9 @@ sealed class ContentVO {
         val badges: List<Badges>,
         val description: String,
     ) : ContentVO()
+
+    // 정의되지 않은 ViewType이 들어왔을 경우를 대비
+    object UnknownContent : ContentVO()
 }
 
 data class Badges(
