@@ -1,26 +1,20 @@
 package com.swm.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.swm.data.network.model.UserDto
-import com.swm.data.network.source.UserDataSource
+import com.swm.domain.usecase.GetScreenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userDataSource: UserDataSource,
+    private val getScreenUseCase: GetScreenUseCase,
 ) : ViewModel() {
-    private val id = MutableStateFlow(0) // for test
-    val userDto = MutableStateFlow(UserDto())
-
-    fun callApi() = viewModelScope.launch {
-        userDataSource.getUser(id.value.toString())
-            .onSuccess { userDto.value = it }
-            .onFailure { userDto.value = UserDto(firstName = "ERROR!") }
-
-        id.value = id.value.plus(1)
+    fun getScreen() = viewModelScope.launch {
+        getScreenUseCase()
+            .onSuccess { Log.d("test", it.toString()) }
+            .onFailure { Log.d("test", it.toString()) }
     }
 }

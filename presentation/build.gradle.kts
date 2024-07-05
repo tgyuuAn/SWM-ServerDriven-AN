@@ -33,7 +33,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
         dataBinding = true
     }
@@ -41,7 +41,6 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data")) // for test
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
