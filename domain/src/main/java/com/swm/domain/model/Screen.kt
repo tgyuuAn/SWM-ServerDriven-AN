@@ -21,8 +21,8 @@ sealed class Section {
 
     data class PlusTitleSection(
         val type: String,
-        val firstRowImage: FirstRowImage,
-        val titleText: TitleText,
+        val firstRowImage: ImageStyle,
+        val titleText: TextStyle,
         val badges: List<Badge>,
         val description: String
     ) : Section()
@@ -33,15 +33,15 @@ data class Badge(
     val text: String
 )
 
-data class FirstRowImage(
+data class ImageStyle(
     val imgUrl: String,
-    val width: String,
-    val height: String
+    val width: Int,
+    val height: Int
 )
 
-data class TitleText(
+data class TextStyle(
     val text: String,
-    val textSize: String,
+    val textSize: Int,
     val textColor: String,
     val textStyle: String
 )

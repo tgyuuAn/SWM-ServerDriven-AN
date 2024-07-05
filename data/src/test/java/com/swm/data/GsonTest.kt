@@ -7,12 +7,12 @@ import com.google.gson.JsonParser
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.swm.data.network.model.BadgeDTO
-import com.swm.data.network.model.ContentDTO
-import com.swm.data.network.model.ImageStyleDTO
-import com.swm.data.network.model.ScreenDTO
-import com.swm.data.network.model.SectionDTO
-import com.swm.data.network.model.TextStyleDTO
+import com.swm.data.network.dto.BadgeDTO
+import com.swm.data.network.dto.ContentDTO
+import com.swm.data.network.dto.ImageStyleDTO
+import com.swm.data.network.dto.ScreenDTO
+import com.swm.data.network.dto.SectionDTO
+import com.swm.data.network.dto.TextStyleDTO
 import org.junit.Assert
 import org.junit.Test
 

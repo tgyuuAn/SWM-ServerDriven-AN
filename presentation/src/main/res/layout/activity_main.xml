@@ -7,7 +7,7 @@
 
         <variable
             name="userDto"
-            type="com.swm.data.network.model.UserDto" />
+            type="com.swm.data.network.dto.UserDto" />
 
         <variable
             name="viewModel"

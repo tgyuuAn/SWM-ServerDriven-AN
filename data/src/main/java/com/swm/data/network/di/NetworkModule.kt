@@ -7,9 +7,9 @@ import com.google.gson.JsonParser
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.swm.data.network.model.ContentDTO
-import com.swm.data.network.model.ScreenDTO
-import com.swm.data.network.model.SectionDTO
+import com.swm.data.network.dto.ContentDTO
+import com.swm.data.network.dto.ScreenDTO
+import com.swm.data.network.dto.SectionDTO
 import com.swm.domain.model.Content
 import dagger.Module
 import dagger.Provides
@@ -21,14 +21,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = ""
-
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
@@ -101,9 +98,11 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ServerDrivenApi::class.java)
+
+    private const val BASE_URL = "https://s3.ap-northeast-2.amazonaws.com/"
 }
 
 interface ServerDrivenApi {
-    @GET("api/")
-    suspend fun getScreen(@Query("screen") screen: String): Response<ScreenDTO>
+    @GET("api.swm-mobile.org/server-driven-viewtype.json")
+    suspend fun getScreen(): Response<ScreenDTO>
 }
