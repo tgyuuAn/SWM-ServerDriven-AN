@@ -13,19 +13,25 @@ data class Content(
 
 sealed class Section {
     data class TitleSection(
-        val type: String,
+        val type: ViewType,
         val title: String,
         val badges: List<Badge>,
         val description: String,
     ) : Section()
 
     data class PlusTitleSection(
-        val type: String,
+        val type: ViewType,
         val firstRowImage: ImageStyle,
         val titleText: TextStyle,
         val badges: List<Badge>,
         val description: String,
     ) : Section()
+
+    data class UnKnownSection(
+        val type: ViewType,
+        val description: String,
+    ) : Section()
+
 }
 
 data class Badge(

@@ -2,14 +2,13 @@ package com.swm.data.network.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.swm.data.network.dto.ContentDTO
 import com.swm.data.network.dto.ScreenDTO
 import com.swm.data.network.dto.SectionDTO
+import com.swm.data.network.dto.ViewTypeDTO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,54 +37,35 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideContentTypeAdapter(): TypeAdapter<ContentDTO> = object : TypeAdapter<ContentDTO>() {
-        override fun write(jsonWriter: JsonWriter?, value: ContentDTO?) {
+    fun provideSectionTypeAdapter(): TypeAdapter<SectionDTO> = object : TypeAdapter<SectionDTO>() {
+        override fun write(jsonWriter: JsonWriter?, value: SectionDTO?) {
             // write 함수는 불필요함
         }
 
-        override fun read(jsonReader: JsonReader?): ContentDTO {
+        override fun read(jsonReader: JsonReader?): SectionDTO {
             if (jsonReader == null) {
                 throw IllegalArgumentException("JsonReader cannot be null")
             }
 
-            var id = ""
-            var sectionComponentType = ""
+            var type = ""
             var section: SectionDTO? = null
+            val jsonElement = JsonParser.parseReader(jsonReader).asJsonObject
 
-            jsonReader.beginObject()
-            while (jsonReader.hasNext()) {
-                when (jsonReader.nextName()) {
-                    "id" -> id = jsonReader.nextString()
-                    "sectionComponentType" -> sectionComponentType = jsonReader.nextString()
-                    "section" -> {
-                        val jsonElement = JsonParser.parseReader(jsonReader)
-                        section = parseSection(sectionComponentType, jsonElement)
-                    }
-                }
+            if (jsonElement.has("type")) {
+                type = jsonElement.get("type").asString
             }
-            jsonReader.endObject()
 
-            return ContentDTO(id, sectionComponentType, section!!)
-        }
+            val viewType = ViewTypeDTO.findViewTypeClassByItsName(type)
+            section = Gson().fromJson(jsonElement, viewType)
 
-        private fun parseSection(type: String, jsonElement: JsonElement): SectionDTO {
-            val gson = Gson()
-            return when (type) {
-                "TITLE" -> gson.fromJson(jsonElement, SectionDTO.TitleSectionDTO::class.java)
-                "PLUS_TITLE" -> gson.fromJson(
-                    jsonElement,
-                    SectionDTO.PlusTitleSectionDTO::class.java
-                )
-
-                else -> throw IllegalArgumentException("Unknown section type: $type")
-            }
+            return section!!
         }
     }
 
     @Singleton
     @Provides
-    fun provideGson(contentTypeAdapter: TypeAdapter<ContentDTO>): Gson = GsonBuilder()
-        .registerTypeAdapter(ContentDTO::class.java, contentTypeAdapter)
+    fun provideGson(sectionTypeAdapter: TypeAdapter<SectionDTO>): Gson = GsonBuilder()
+        .registerTypeAdapter(SectionDTO::class.java, sectionTypeAdapter)
         .create()
 
     @Singleton
