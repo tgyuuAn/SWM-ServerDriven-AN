@@ -85,8 +85,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGson(contentTypeAdapter: TypeAdapter<Content>): Gson = GsonBuilder()
-        .registerTypeAdapter(Content::class.java, contentTypeAdapter)
+    fun provideGson(contentTypeAdapter: TypeAdapter<ContentDTO>): Gson = GsonBuilder()
+        .registerTypeAdapter(ContentDTO::class.java, contentTypeAdapter)
         .create()
 
     @Singleton
