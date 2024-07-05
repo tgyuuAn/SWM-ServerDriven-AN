@@ -9,5 +9,6 @@ java {
 }
 
 dependencies {
+    implementation(libs.dagger)
     ksp(libs.hilt.compiler)
 }
