@@ -6,6 +6,7 @@ import com.swm.domain.model.ImageStyle
 import com.swm.domain.model.Screen
 import com.swm.domain.model.Section
 import com.swm.domain.model.TextStyle
+import com.swm.domain.model.ViewType
 
 data class ScreenDTO(
     val screenName: String,
@@ -39,7 +40,7 @@ sealed class SectionDTO {
         val description: String,
     ) : SectionDTO() {
         override fun toEntity() = Section.TitleSection(
-            type = type,
+            type = ViewType.findClassByItsName(type),
             title = title,
             badges = badges.map { it.toEntity() },
             description = description,
@@ -54,10 +55,20 @@ sealed class SectionDTO {
         val description: String,
     ) : SectionDTO() {
         override fun toEntity() = Section.PlusTitleSection(
-            type = type,
+            type = ViewType.findClassByItsName(type),
             firstRowImage = firstRowImage.toEntity(),
             titleText = titleText.toEntity(),
             badges = badges.map { it.toEntity() },
+            description = description,
+        )
+    }
+
+    data class UnKnownSectionDTO(
+        val type: String,
+        val description: String,
+    ) : SectionDTO() {
+        override fun toEntity() = Section.UnKnownSection(
+            type = ViewType.findClassByItsName(type),
             description = description,
         )
     }
