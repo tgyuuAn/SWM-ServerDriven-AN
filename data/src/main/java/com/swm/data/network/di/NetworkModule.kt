@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -43,5 +44,5 @@ object NetworkModule {
 
 interface ServerDrivenApi {
     @GET("api/users")
-    suspend fun getUser(@Query("id") id: String): UserDto
+    suspend fun getUser(@Query("id") id: String): Response<UserDto>
 }

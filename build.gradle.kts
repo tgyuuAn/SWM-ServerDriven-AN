@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
+    kotlin("kapt") version "2.0.0" apply false
 }

@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="userDto"
+            type="com.swm.data.network.model.UserDto" />
+
+        <variable
             name="viewModel"
             type="com.swm.presentation.MainViewModel" />
     </data>
@@ -17,13 +21,27 @@
         tools:context="com.swm.presentation.MainActivity">
 
         <TextView
+            android:id="@+id/TV_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:text="@{viewModel.userDto.toString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.callApi()}"
+            android:paddingHorizontal="20.dp"
+            android:paddingVertical="10.dp"
+            android:text="Call API..."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TV_result"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

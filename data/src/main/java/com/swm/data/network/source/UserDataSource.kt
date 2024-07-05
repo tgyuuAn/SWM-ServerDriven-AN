@@ -1,11 +1,13 @@
 package com.swm.data.network.source
 
 import com.swm.data.network.di.ServerDrivenApi
+import com.swm.data.network.model.UserDto
+import com.swm.data.network.util.await
 import javax.inject.Inject
 
 // For Test
 class UserDataSource @Inject constructor(
     private val serverDrivenApi: ServerDrivenApi,
 ) {
-    private suspend fun getUser(id: String) = serverDrivenApi.getUser(id)
+    suspend fun getUser(id: String): Result<UserDto> = serverDrivenApi.getUser(id).await()
 }

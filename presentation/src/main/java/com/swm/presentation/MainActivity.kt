@@ -1,6 +1,7 @@
 package com.swm.presentation
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val activityViewModel : MainViewModel by viewModels()
-    private lateinit var binding : ActivityMainBinding
+    private val activityViewModel: MainViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,5 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.viewModel = activityViewModel
+
     }
 }
