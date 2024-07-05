@@ -1,13 +1,18 @@
 package com.swm.presentation
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.swm.domain.ViewType
 import com.swm.domain.entity.ContentVO
 import com.swm.domain.entity.ViewTypeVO
+import com.swm.presentation.databinding.ViewPlusTitleSectionBinding
+import com.swm.presentation.databinding.ViewTitleSectionBinding
 
 class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var contents: List<ViewTypeVO> = listOf()
@@ -29,8 +34,8 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
         return when(viewType) {
-            R.layout.view_title_section -> TitleViewHolder(view)
-            R.layout.view_plus_title_section -> PlusTitleViewHolder(view)
+            R.layout.view_title_section -> TitleViewHolder(ViewTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            R.layout.view_plus_title_section -> PlusTitleViewHolder(ViewPlusTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> UnknownViewHolder(view)
         }
     }
@@ -39,22 +44,41 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder: RecyclerView.ViewHolder, position: Int
     ) {
         when (holder) {
-            is TitleViewHolder -> holder.bind(contents[position].section)
-            is PlusTitleViewHolder -> holder.bind(contents[position].section)
+            is TitleViewHolder -> holder.bind(contents[position].section as ContentVO.TitleSection)
+            is PlusTitleViewHolder -> holder.bind(contents[position].section as ContentVO.PlusTitleSection)
         }
     }
 
     override fun getItemCount(): Int = contents.size
 
-    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(content: ContentVO) {
-
+    class TitleViewHolder(
+        private val binding: ViewTitleSectionBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(content: ContentVO.TitleSection) {
+            binding.textTitle.text = content.title
+            // binding.recyclerBadge.adapter =
+            binding.textDescription.text = content.description
         }
     }
 
-    class PlusTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(content: ContentVO) {
+    class PlusTitleViewHolder(
+        private val binding: ViewPlusTitleSectionBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(content: ContentVO.PlusTitleSection) {
+            binding.imageFirstRow.load(content.firstRowImage.imageUrl)
+            binding.imageFirstRow.layoutParams.width = content.firstRowImage.width.toInt()
+            binding.imageFirstRow.layoutParams.height = content.firstRowImage.height.toInt()
 
+            binding.textTitle.text = content.titleText.text
+            binding.textTitle.textSize = content.titleText.textSize.toFloat()
+            binding.textTitle.setTextColor(Color.parseColor(content.titleText.textColor))
+            if(content.titleText.textStyle == "bold") binding.textTitle.setTypeface(null, Typeface.BOLD)
+            if(content.titleText.textStyle == "italic") binding.textTitle.setTypeface(null, Typeface.ITALIC)
+            // if(content.titleText.textStyle == "strike")
+
+            // binding.recyclerBadge.adapter =
+
+            binding.textDescription.text = content.description
         }
     }
 
