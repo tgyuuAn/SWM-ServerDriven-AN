@@ -26,6 +26,12 @@ sealed class Section {
         val badges: List<Badge>,
         val description: String,
     ) : Section()
+
+    data class UnKnownSection(
+        val type: String,
+        val description: String,
+    ) : Section()
+
 }
 
 data class Badge(
