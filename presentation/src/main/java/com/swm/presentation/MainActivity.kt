@@ -22,6 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.viewModel = activityViewModel
-
+        binding.lifecycleOwner = this
     }
 }

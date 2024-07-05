@@ -1,5 +1,6 @@
 package com.swm.data.network.di
 
+import com.swm.data.network.model.ReqresResponse
 import com.swm.data.network.model.UserDto
 import dagger.Module
 import dagger.Provides
@@ -44,5 +45,5 @@ object NetworkModule {
 
 interface ServerDrivenApi {
     @GET("api/users")
-    suspend fun getUser(@Query("id") id: String): Response<UserDto>
+    suspend fun getUser(@Query("id") id: String): Response<ReqresResponse>
 }

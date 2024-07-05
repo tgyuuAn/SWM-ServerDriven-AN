@@ -1,11 +1,13 @@
 package com.swm.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swm.data.network.model.UserDto
 import com.swm.data.network.source.UserDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,13 +15,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userDataSource: UserDataSource,
 ) : ViewModel() {
-    private val id = MutableStateFlow(0) // for test
-    val userDto = MutableStateFlow(UserDto())
+    private val id = MutableStateFlow(1) // for test
+    private val _userDto = MutableStateFlow(UserDto())
+    val userDto = _userDto.asStateFlow()
 
     fun callApi() = viewModelScope.launch {
         userDataSource.getUser(id.value.toString())
-            .onSuccess { userDto.value = it }
-            .onFailure { userDto.value = UserDto(firstName = "ERROR!") }
+            .onSuccess { _userDto.value = it.userDto }
+            .onFailure { _userDto.value = UserDto(firstName = "ERROR!") }
 
         id.value = id.value.plus(1)
     }
