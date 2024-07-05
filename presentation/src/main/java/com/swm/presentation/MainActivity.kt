@@ -1,7 +1,6 @@
 package com.swm.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity

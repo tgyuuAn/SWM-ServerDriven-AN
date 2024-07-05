@@ -2,13 +2,13 @@ package com.swm.domain.model
 
 data class Screen(
     val screenName: String,
-    val contents: List<Content>
+    val contents: List<Content>,
 )
 
 data class Content(
     val id: String,
     val sectionComponentType: String,
-    val section: Section
+    val section: Section,
 )
 
 sealed class Section {
@@ -16,7 +16,7 @@ sealed class Section {
         val type: String,
         val title: String,
         val badges: List<Badge>,
-        val description: String
+        val description: String,
     ) : Section()
 
     data class PlusTitleSection(
@@ -24,24 +24,24 @@ sealed class Section {
         val firstRowImage: ImageStyle,
         val titleText: TextStyle,
         val badges: List<Badge>,
-        val description: String
+        val description: String,
     ) : Section()
 }
 
 data class Badge(
     val badgeImage: String,
-    val text: String
+    val text: String,
 )
 
 data class ImageStyle(
     val imgUrl: String,
     val width: Int,
-    val height: Int
+    val height: Int,
 )
 
 data class TextStyle(
     val text: String,
     val textSize: Int,
     val textColor: String,
-    val textStyle: String
+    val textStyle: String,
 )

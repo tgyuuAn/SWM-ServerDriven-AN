@@ -10,7 +10,6 @@ import com.google.gson.stream.JsonWriter
 import com.swm.data.network.dto.ContentDTO
 import com.swm.data.network.dto.ScreenDTO
 import com.swm.data.network.dto.SectionDTO
-import com.swm.domain.model.Content
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
