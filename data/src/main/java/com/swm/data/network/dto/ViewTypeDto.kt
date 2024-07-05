@@ -1,16 +1,16 @@
-package com.swm.domain.model
+package com.swm.data.network.dto
 
 import java.lang.reflect.Type
 
-enum class ViewType(
-    private val viewTypeClass: Type,
+enum class ViewTypeDTO(
+    val viewTypeClass: Type,
 ) {
-    TitleSection(Section.TitleSection::class.java),
-    PlusTitleSection(Section.PlusTitleSection::class.java),
-    UnKnown(Section.UnKnownSection::class.java);
+    TitleSection(SectionDTO.TitleSectionDTO::class.java),
+    PlusTitleSection(SectionDTO.PlusTitleSectionDTO::class.java),
+    UnKnown(SectionDTO.UnKnownSectionDTO::class.java);
 
     companion object {
-        fun findClassByItsName(viewTypeString: String?): ViewType {
+        fun findClassByItsName(viewTypeString: String?): ViewTypeDTO {
             entries.find { it.name == viewTypeString }?.let {
                 return it
             } ?: return UnKnown
