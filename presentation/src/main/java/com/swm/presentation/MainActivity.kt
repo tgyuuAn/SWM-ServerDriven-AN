@@ -40,16 +40,6 @@ class MainActivity : AppCompatActivity() {
             }
             .launchIn(lifecycleScope)
 
-
-        // binding.recyclerTitle.adapter = HomeContentAdapter()
-
-        // viewModel에서 데이터 받아오기
-        /*
-        viewModel.contents.observe(viewLifecycleOwner, Observer { contents ->
-            adapter.setContents(contents)
-        })
-        viewModel.fetchContents()
-        */
     }
 
     // Recyclerview init

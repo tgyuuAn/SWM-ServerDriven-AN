@@ -14,7 +14,8 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.swm.presentation.MainActivity">
+        tools:context="com.swm.presentation.MainActivity"
+        android:fitsSystemWindows="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_title"

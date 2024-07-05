@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.swm.domain.model.Content
@@ -12,6 +13,7 @@ import com.swm.domain.model.Section
 import com.swm.domain.model.ViewType
 import com.swm.presentation.databinding.ViewPlusTitleSectionBinding
 import com.swm.presentation.databinding.ViewTitleSectionBinding
+import com.swm.presentation.databinding.ViewUnknownSectionBinding
 
 class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var contents: List<Content> = listOf()
@@ -30,12 +32,10 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-
         return when(viewType) {
             R.layout.view_title_section -> TitleViewHolder(ViewTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             R.layout.view_plus_title_section -> PlusTitleViewHolder(ViewPlusTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> UnknownViewHolder(view)
+            else -> UnknownViewHolder(ViewUnknownSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
     }
 
@@ -55,7 +55,14 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(content: Section.TitleSection) {
             binding.textTitle.text = content.title
-            // binding.recyclerBadge.adapter =
+
+            val homeTitleBadgeAdapter = HomeTitleBadgeAdapter()
+            homeTitleBadgeAdapter.setContents(content.badges)
+            binding.recyclerBadge.apply {
+                adapter = homeTitleBadgeAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+
             binding.textDescription.text = content.description
         }
     }
@@ -71,17 +78,34 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.textTitle.text = content.titleText.text
             binding.textTitle.textSize = content.titleText.textSize.toFloat()
             binding.textTitle.setTextColor(Color.parseColor(content.titleText.textColor))
-            if(content.titleText.textStyle == "bold") binding.textTitle.setTypeface(null, Typeface.BOLD)
-            if(content.titleText.textStyle == "italic") binding.textTitle.setTypeface(null, Typeface.ITALIC)
+
+            val textStyle = content.titleText.textStyle
+
+            val typeface = when {
+                textStyle.contains("bold") && textStyle.contains("italic") -> Typeface.BOLD_ITALIC
+                textStyle.contains("bold") -> Typeface.BOLD
+                textStyle.contains("italic") -> Typeface.ITALIC
+                else -> Typeface.NORMAL
+            }
+
+            binding.textTitle.setTypeface(null, typeface)
+
             // if(content.titleText.textStyle == "strike")
 
-            // binding.recyclerBadge.adapter =
+            val homeTitleBadgeAdapter = HomeTitleBadgeAdapter()
+            homeTitleBadgeAdapter.setContents(content.badges)
+            binding.recyclerBadge.apply {
+                adapter = homeTitleBadgeAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
 
             binding.textDescription.text = content.description
         }
     }
 
-    class UnknownViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class UnknownViewHolder(
+        private val binding: ViewUnknownSectionBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
     }
 }
