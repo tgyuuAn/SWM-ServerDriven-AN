@@ -5,19 +5,18 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.swm.domain.ViewType
-import com.swm.domain.entity.ContentVO
-import com.swm.domain.entity.ViewTypeVO
+import com.swm.domain.model.Content
+import com.swm.domain.model.Section
+import com.swm.domain.model.ViewType
 import com.swm.presentation.databinding.ViewPlusTitleSectionBinding
 import com.swm.presentation.databinding.ViewTitleSectionBinding
 
 class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var contents: List<ViewTypeVO> = listOf()
+    private var contents: List<Content> = listOf()
 
-    fun setContents(contents: List<ViewTypeVO>) {
+    fun setContents(contents: List<Content>) {
         this.contents = contents
         notifyDataSetChanged()
     }
@@ -44,8 +43,8 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder: RecyclerView.ViewHolder, position: Int
     ) {
         when (holder) {
-            is TitleViewHolder -> holder.bind(contents[position].section as ContentVO.TitleSection)
-            is PlusTitleViewHolder -> holder.bind(contents[position].section as ContentVO.PlusTitleSection)
+            is TitleViewHolder -> holder.bind(contents[position].section as Section.TitleSection)
+            is PlusTitleViewHolder -> holder.bind(contents[position].section as Section.PlusTitleSection)
         }
     }
 
@@ -54,7 +53,7 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class TitleViewHolder(
         private val binding: ViewTitleSectionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(content: ContentVO.TitleSection) {
+        fun bind(content: Section.TitleSection) {
             binding.textTitle.text = content.title
             // binding.recyclerBadge.adapter =
             binding.textDescription.text = content.description
@@ -64,8 +63,8 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class PlusTitleViewHolder(
         private val binding: ViewPlusTitleSectionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(content: ContentVO.PlusTitleSection) {
-            binding.imageFirstRow.load(content.firstRowImage.imageUrl)
+        fun bind(content: Section.PlusTitleSection) {
+            binding.imageFirstRow.load(content.firstRowImage.imgUrl)
             binding.imageFirstRow.layoutParams.width = content.firstRowImage.width.toInt()
             binding.imageFirstRow.layoutParams.height = content.firstRowImage.height.toInt()
 

@@ -5,8 +5,8 @@ import java.lang.reflect.Type
 enum class ViewType(
     private val viewTypeClass: Type,
 ) {
-    TitleSection(Section.TitleSection::class.java),
-    PlusTitleSection(Section.PlusTitleSection::class.java),
+    TITLE(Section.TitleSection::class.java),
+    PLUS_TITLE(Section.PlusTitleSection::class.java),
     UnKnown(Section.UnKnownSection::class.java);
 
     companion object {

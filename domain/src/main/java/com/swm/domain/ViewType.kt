@@ -1,14 +1,14 @@
 package com.swm.domain
 
-import com.swm.domain.entity.ContentVO
+import com.swm.domain.model.Section
 import java.lang.reflect.Type
 
 enum class ViewType(
     private val viewTypeClass: Type
 ) {
-    TITLE(ContentVO.TitleSection::class.java),
-    PLUS_TITLE(ContentVO.PlusTitleSection::class.java),
-    UnKnownViewType(ContentVO.UnknownContent::class.java);
+    TITLE(Section.TitleSection::class.java),
+    PLUS_TITLE(Section.PlusTitleSection::class.java),
+    UnKnownViewType(Section.UnKnownSection::class.java);
 
     // JSON에서 넘겨주는 sectionComponentType의 이름으로
     companion object {

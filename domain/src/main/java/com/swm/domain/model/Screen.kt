@@ -1,26 +1,26 @@
 package com.swm.domain.model
 
 data class Screen(
-    val screenName: String,
-    val contents: List<Content>,
+    val screenName: String = "",
+    val contents: List<Content> = listOf(),
 )
 
 data class Content(
     val id: String,
-    val sectionComponentType: String,
+    val sectionComponentType: ViewType,
     val section: Section,
 )
 
 sealed class Section {
     data class TitleSection(
-        val type: ViewType,
+        val type: String,
         val title: String,
         val badges: List<Badge>,
         val description: String,
     ) : Section()
 
     data class PlusTitleSection(
-        val type: ViewType,
+        val type: String,
         val firstRowImage: ImageStyle,
         val titleText: TextStyle,
         val badges: List<Badge>,
@@ -28,7 +28,7 @@ sealed class Section {
     ) : Section()
 
     data class UnKnownSection(
-        val type: ViewType,
+        val type: String,
         val description: String,
     ) : Section()
 
