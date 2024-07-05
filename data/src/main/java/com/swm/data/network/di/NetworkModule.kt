@@ -1,7 +1,16 @@
 package com.swm.data.network.di
 
-import com.swm.data.network.model.ReqresResponse
-import com.swm.data.network.model.UserDto
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import com.swm.data.network.model.ContentDTO
+import com.swm.data.network.model.ScreenDTO
+import com.swm.data.network.model.SectionDTO
+import com.swm.domain.model.Content
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +27,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "https://reqres.in/"
+    private const val BASE_URL = ""
 
     @Singleton
     @Provides
@@ -33,17 +42,68 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): ServerDrivenApi =
+    fun provideContentTypeAdapter(): TypeAdapter<ContentDTO> = object : TypeAdapter<ContentDTO>() {
+        override fun write(jsonWriter: JsonWriter?, value: ContentDTO?) {
+            // write 함수는 불필요함
+        }
+
+        override fun read(jsonReader: JsonReader?): ContentDTO {
+            if (jsonReader == null) {
+                throw IllegalArgumentException("JsonReader cannot be null")
+            }
+
+            var id = ""
+            var sectionComponentType = ""
+            var section: SectionDTO? = null
+
+            jsonReader.beginObject()
+            while (jsonReader.hasNext()) {
+                when (jsonReader.nextName()) {
+                    "id" -> id = jsonReader.nextString()
+                    "sectionComponentType" -> sectionComponentType = jsonReader.nextString()
+                    "section" -> {
+                        val jsonElement = JsonParser.parseReader(jsonReader)
+                        section = parseSection(sectionComponentType, jsonElement)
+                    }
+                }
+            }
+            jsonReader.endObject()
+
+            return ContentDTO(id, sectionComponentType, section!!)
+        }
+
+        private fun parseSection(type: String, jsonElement: JsonElement): SectionDTO {
+            val gson = Gson()
+            return when (type) {
+                "TITLE" -> gson.fromJson(jsonElement, SectionDTO.TitleSectionDTO::class.java)
+                "PLUS_TITLE" -> gson.fromJson(
+                    jsonElement,
+                    SectionDTO.PlusTitleSectionDTO::class.java
+                )
+
+                else -> throw IllegalArgumentException("Unknown section type: $type")
+            }
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideGson(contentTypeAdapter: TypeAdapter<Content>): Gson = GsonBuilder()
+        .registerTypeAdapter(Content::class.java, contentTypeAdapter)
+        .create()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): ServerDrivenApi =
         Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ServerDrivenApi::class.java)
 }
 
-
 interface ServerDrivenApi {
-    @GET("api/users")
-    suspend fun getUser(@Query("id") id: String): Response<ReqresResponse>
+    @GET("api/")
+    suspend fun getScreen(@Query("screen") screen: String): Response<ScreenDTO>
 }
