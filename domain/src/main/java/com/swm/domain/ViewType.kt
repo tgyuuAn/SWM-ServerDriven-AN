@@ -1,19 +1,21 @@
-package com.swm.domain.model
+package com.swm.domain
 
+import com.swm.domain.model.Section
 import java.lang.reflect.Type
 
 enum class ViewType(
-    private val viewTypeClass: Type,
+    private val viewTypeClass: Type
 ) {
     TITLE(Section.TitleSection::class.java),
     PLUS_TITLE(Section.PlusTitleSection::class.java),
-    UnKnown(Section.UnKnownSection::class.java);
+    UnKnownViewType(Section.UnKnownSection::class.java);
 
+    // JSON에서 넘겨주는 sectionComponentType의 이름으로
     companion object {
         fun findClassByItsName(viewTypeString: String?): ViewType {
-            entries.find { it.name == viewTypeString }?.let {
+            values().find { it.name == viewTypeString }?.let {
                 return it
-            } ?: return UnKnown
+            } ?: return UnKnownViewType
         }
 
         fun findViewTypeClassByItsName(viewTypeString: String?): Type {

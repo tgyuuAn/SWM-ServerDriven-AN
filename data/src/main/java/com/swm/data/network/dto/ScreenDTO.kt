@@ -20,7 +20,7 @@ data class ScreenDTO(
 
 data class ContentDTO(
     val id: String,
-    val sectionComponentType: String,
+    val sectionComponentType: ViewType,
     val section: SectionDTO,
 ) {
     fun toEntity() = Content(
@@ -40,7 +40,7 @@ sealed class SectionDTO {
         val description: String,
     ) : SectionDTO() {
         override fun toEntity() = Section.TitleSection(
-            type = ViewType.findClassByItsName(type),
+            type = type,
             title = title,
             badges = badges.map { it.toEntity() },
             description = description,
@@ -55,7 +55,7 @@ sealed class SectionDTO {
         val description: String,
     ) : SectionDTO() {
         override fun toEntity() = Section.PlusTitleSection(
-            type = ViewType.findClassByItsName(type),
+            type = type,
             firstRowImage = firstRowImage.toEntity(),
             titleText = titleText.toEntity(),
             badges = badges.map { it.toEntity() },
@@ -68,7 +68,7 @@ sealed class SectionDTO {
         val description: String,
     ) : SectionDTO() {
         override fun toEntity() = Section.UnKnownSection(
-            type = ViewType.findClassByItsName(type),
+            type = type,
             description = description,
         )
     }

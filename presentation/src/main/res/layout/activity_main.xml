@@ -10,23 +10,20 @@
             type="com.swm.presentation.MainViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.swm.presentation.MainActivity">
+        tools:context="com.swm.presentation.MainActivity"
+        android:fitsSystemWindows="true">
 
-        <Button
-            android:id="@+id/BTN"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{()->viewModel.getScreen()}"
-            android:paddingHorizontal="20.dp"
-            android:paddingVertical="10.dp"
-            android:text="Get Screen...!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:nestedScrollingEnabled="false"/>
+
+    </RelativeLayout>
 </layout>
