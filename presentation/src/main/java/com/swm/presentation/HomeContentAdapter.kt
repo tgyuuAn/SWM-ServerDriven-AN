@@ -23,18 +23,16 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (contents[position].sectionComponentType) {
-            ViewType.TITLE -> R.layout.view_title_section
-            ViewType.PLUS_TITLE -> R.layout.view_plus_title_section
-            else -> R.layout.view_unknown_section
-        }
+    override fun getItemViewType(position: Int) : Int {
+        return contents[position].sectionComponentType.ordinal
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
-            R.layout.view_title_section -> TitleViewHolder(ViewTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            R.layout.view_plus_title_section -> PlusTitleViewHolder(ViewPlusTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewTypeEnum = ViewType.values()[viewType]
+
+        return when(viewTypeEnum) {
+            ViewType.TITLE -> TitleViewHolder(ViewTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            ViewType.PLUS_TITLE -> PlusTitleViewHolder(ViewPlusTitleSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> UnknownViewHolder(ViewUnknownSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
     }
@@ -45,6 +43,7 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (holder) {
             is TitleViewHolder -> holder.bind(contents[position].section as Section.TitleSection)
             is PlusTitleViewHolder -> holder.bind(contents[position].section as Section.PlusTitleSection)
+            is UnknownViewHolder -> holder.bind(contents[position].section as Section.UnKnownSection)
         }
     }
 
@@ -106,6 +105,8 @@ class HomeContentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class UnknownViewHolder(
         private val binding: ViewUnknownSectionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(content: Section.UnKnownSection) {
 
+        }
     }
 }
