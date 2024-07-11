@@ -6,9 +6,10 @@ import com.google.gson.JsonParser
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.swm.data.network.dto.ScreenDTO
-import com.swm.data.network.dto.SectionDTO
-import com.swm.data.network.dto.ViewTypeDTO
+import com.swm.domain.model.Content
+import com.swm.domain.model.Screen
+import com.swm.domain.model.Section
+import com.swm.domain.model.ViewType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    private const val BASE_URL = "https://s3.ap-northeast-2.amazonaws.com/"
+
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
@@ -37,35 +40,40 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideSectionTypeAdapter(): TypeAdapter<SectionDTO> = object : TypeAdapter<SectionDTO>() {
-        override fun write(jsonWriter: JsonWriter?, value: SectionDTO?) {
+    fun provideSectionTypeAdapter(): TypeAdapter<Content> = object : TypeAdapter<Content>() {
+        override fun write(jsonWriter: JsonWriter?, value: Content?) {
             // write 함수는 불필요함
         }
 
-        override fun read(jsonReader: JsonReader?): SectionDTO {
+        override fun read(jsonReader: JsonReader?): Content {
             if (jsonReader == null) {
                 throw IllegalArgumentException("JsonReader cannot be null")
             }
 
             var type = ""
-            var section: SectionDTO? = null
             val jsonElement = JsonParser.parseReader(jsonReader).asJsonObject
 
-            if (jsonElement.has("type")) {
-                type = jsonElement.get("type").asString
+            if (jsonElement.has("sectionComponentType")) {
+                type = jsonElement.get("sectionComponentType").asString
             }
 
-            val viewType = ViewTypeDTO.findViewTypeClassByItsName(type)
-            section = Gson().fromJson(jsonElement, viewType)
+            val viewType = ViewType.findViewTypeClassByItsName(type)
 
-            return section!!
+            val section: Section = Gson().fromJson(jsonElement.get("section"), viewType)
+            val content = Content (
+                id = jsonElement.get("id").asString,
+                sectionComponentType = ViewType.findClassByItsName(type),
+                section = section
+            )
+
+            return content
         }
     }
 
     @Singleton
     @Provides
-    fun provideGson(sectionTypeAdapter: TypeAdapter<SectionDTO>): Gson = GsonBuilder()
-        .registerTypeAdapter(SectionDTO::class.java, sectionTypeAdapter)
+    fun provideGson(contentTypeAdapter: TypeAdapter<Content>): Gson = GsonBuilder()
+        .registerTypeAdapter(Content::class.java, contentTypeAdapter)
         .create()
 
     @Singleton
@@ -77,11 +85,9 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ServerDrivenApi::class.java)
-
-    private const val BASE_URL = "https://s3.ap-northeast-2.amazonaws.com/"
 }
 
 interface ServerDrivenApi {
     @GET("api.swm-mobile.org/server-driven-viewtype.json")
-    suspend fun getScreen(): Response<ScreenDTO>
+    suspend fun getScreen(): Response<Screen>
 }

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swm.domain.model.Screen
-import com.swm.domain.usecase.GetScreenUseCase
+import com.swm.domain.repository.ScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,13 +13,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getScreenUseCase: GetScreenUseCase,
+    private val screenRepository: ScreenRepository,
 ) : ViewModel() {
     private val _screen = MutableStateFlow<Screen>(Screen())
     val screen = _screen.asStateFlow()
 
     fun getScreen() = viewModelScope.launch {
-        getScreenUseCase()
+        screenRepository
+            .getScreen()
             .onSuccess {
                 _screen.value = it
             }

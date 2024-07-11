@@ -41,13 +41,13 @@ data class Badge(
 
 data class ImageStyle(
     val imgUrl: String,
-    val width: Int,
-    val height: Int,
+    val width: String,
+    val height: String,
 )
 
 data class TextStyle(
     val text: String,
-    val textSize: Int,
+    val textSize: String,
     val textColor: String,
     val textStyle: String,
 )
