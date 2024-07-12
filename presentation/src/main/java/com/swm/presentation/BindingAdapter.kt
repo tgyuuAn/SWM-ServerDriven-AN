@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.StyleSpan
@@ -47,6 +48,17 @@ object BindingAdapter {
                         val absoluteSizeSpan = AbsoluteSizeSpan(it, true) // true to use dp
                         spannableText.setSpan(
                             absoluteSizeSpan,
+                            start,
+                            end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+
+                    textContent?.background?.let {
+                        val color = Color.parseColor(it)
+                        val backgroundSpan = BackgroundColorSpan(color)
+                        spannableText.setSpan(
+                            backgroundSpan,
                             start,
                             end,
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
