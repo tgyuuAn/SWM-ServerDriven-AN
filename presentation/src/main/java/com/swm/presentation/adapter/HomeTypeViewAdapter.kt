@@ -1,6 +1,5 @@
 package com.swm.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +14,6 @@ import com.swm.presentation.viewholder.TypeViewViewHolder
 class HomeTypeViewAdapter : RecyclerView.Adapter<TypeViewViewHolder>() {
     private var contents: List<ContentItemVO> = listOf()
 
-    init {
-        Log.d("test", "TypeViewAdapter 생성")
-    }
-
     fun setContents(contents: List<ContentItemVO>) {
         this.contents = contents
         notifyDataSetChanged()
@@ -30,8 +25,6 @@ class HomeTypeViewAdapter : RecyclerView.Adapter<TypeViewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewViewHolder {
         val viewTypeEnum = ViewType.entries[viewType]
-
-        Log.d("test", "CreateViewHolder")
 
         return when (viewTypeEnum) {
             ViewType.AViewType -> TypeViewViewHolder.ATypeViewHolder(
@@ -57,8 +50,6 @@ class HomeTypeViewAdapter : RecyclerView.Adapter<TypeViewViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TypeViewViewHolder, position: Int) {
-        Log.d("test", "BindViewHolder")
-
         holder.bind(contents[position].content)
     }
 
