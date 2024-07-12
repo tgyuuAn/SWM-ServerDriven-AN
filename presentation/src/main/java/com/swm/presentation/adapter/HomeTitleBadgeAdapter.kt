@@ -1,4 +1,4 @@
-package com.swm.presentation
+package com.swm.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,7 +16,13 @@ class HomeTitleBadgeAdapter : RecyclerView.Adapter<HomeTitleBadgeAdapter.BadgeVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BadgeViewHolder {
-        return BadgeViewHolder(ItemTitleBadgeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return BadgeViewHolder(
+            ItemTitleBadgeBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: BadgeViewHolder, position: Int) {
@@ -29,8 +35,10 @@ class HomeTitleBadgeAdapter : RecyclerView.Adapter<HomeTitleBadgeAdapter.BadgeVi
         private val binding: ItemTitleBadgeBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Badge) {
-            binding.textBadge.text = item.text
-            binding.imageBadge.load(item.badgeImage)
+            binding.apply {
+                textBadge.text = item.text
+                imageBadge.load(item.badgeImage)
+            }
         }
     }
 }
