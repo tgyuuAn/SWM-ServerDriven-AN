@@ -1,7 +1,6 @@
 package com.swm.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.swm.presentation.adapter.HomeContentAdapter
+import com.swm.presentation.adapter.HomeTypeViewAdapter
 import com.swm.presentation.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val activityViewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeContentAdapter: HomeContentAdapter
+    private lateinit var homeTypeViewAdapter: HomeTypeViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +29,16 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
 
-        lifecycleScope.launch {
-            activityViewModel.apply {
+        activityViewModel.apply {
+            lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     screen.collect { homeContentAdapter.setContents(it.contents) }
                 }
+            }
 
+            lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    richTextScreen.collect { Log.d("test", it.toString()) }
+                    richTextScreen.collect { homeTypeViewAdapter.setContents(it.responseData.contents) }
                 }
             }
         }
@@ -51,11 +54,19 @@ class MainActivity : AppCompatActivity() {
     // Recyclerview init
     private fun initRecyclerView() = binding.apply {
         homeContentAdapter = HomeContentAdapter()
+        recyclerTitle.adapter = homeContentAdapter
         recyclerTitle.layoutManager = LinearLayoutManager(
             this@MainActivity,
             LinearLayoutManager.VERTICAL,
             false
         )
-        recyclerTitle.adapter = homeContentAdapter
+
+        homeTypeViewAdapter = HomeTypeViewAdapter()
+        recyclerTypeView.adapter = homeTypeViewAdapter
+        recyclerTypeView.layoutManager = LinearLayoutManager(
+            this@MainActivity,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
     }
 }

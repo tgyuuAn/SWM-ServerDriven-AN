@@ -40,7 +40,10 @@ class MainViewModel @Inject constructor(
     private fun getRichTextScreen() = viewModelScope.launch {
         richTextScreenRepository
             .getRichTextScreen()
-            .onSuccess { _richTextScreen.value = it }
+            .onSuccess {
+                _richTextScreen.value = it
+                Log.d("test", "ViewModel ${it}")
+            }
             .onFailure { Log.d("RichText test fail", it.toString()) }
     }
 }

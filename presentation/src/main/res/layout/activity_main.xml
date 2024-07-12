@@ -10,20 +10,29 @@
             type="com.swm.presentation.MainViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.swm.presentation.MainActivity"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context="com.swm.presentation.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:nestedScrollingEnabled="false"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_type_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
 </layout>
