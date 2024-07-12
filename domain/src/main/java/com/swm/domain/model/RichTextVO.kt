@@ -43,6 +43,7 @@ data class RichText (
 data class Text(
     val text: String,
     val fontSize: Int,
+    val background: String?,
     val textColor: String?,
     val textStyle: List<String>?,
 )
