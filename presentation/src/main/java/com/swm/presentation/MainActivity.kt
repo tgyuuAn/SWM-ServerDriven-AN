@@ -31,28 +31,31 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
 
-        binding.viewModel = activityViewModel
         binding.lifecycleOwner = this
+        binding.apply {
+            viewModel = activityViewModel
 
-        binding.viewModel?.getScreen()
-        binding.viewModel!!.screen
-            .onEach {
-                initRecyclerView(it)
-            }
-            .launchIn(lifecycleScope)
+            viewModel?.apply {
+                // 첫번째 과제
+                getScreen()
+                screen.onEach {
+                        initRecyclerView(it)
+                    }
+                    .launchIn(lifecycleScope)
 
-        // ✅ RichText test
-        binding.viewModel?.getRichTextScreen()
-        binding.viewModel!!.richTextScreen
-            .onEach {
-                // ✅ 데이터가 잘 받아와지는지 log 찍어보는 부분입니다! presentation 구현하실 때 지우셔도 됩니다
-                Log.d("rich text", it.toString())
-                Log.d("rich text content 길이", it.responseData.contents.size.toString())
-                if(it.responseData.contents.size == 3) {
-                    Log.d("rich text > RichViewType", it.responseData.contents[2].content.toString());
-                }
+                // ✅ RichText 과제
+                getRichTextScreen()
+                richTextScreen.onEach {
+                        // ✅ 데이터가 잘 받아와지는지 log 찍어보는 부분입니다! presentation 구현하실 때 지우셔도 됩니다
+                        Log.d("rich text", it.toString())
+                        Log.d("rich text content 길이", it.responseData.contents.size.toString())
+                        if(it.responseData.contents.size == 3) {
+                            Log.d("rich text > RichViewType", it.responseData.contents[2].content.toString());
+                        }
+                    }
+                    .launchIn(lifecycleScope)
             }
-            .launchIn(lifecycleScope)
+        }
     }
 
     // Recyclerview init
