@@ -45,7 +45,7 @@ data class Text(
     val fontSize: Int,
     val background: String?,
     val textColor: String?,
-    val textStyle: List<String>?,
+    val textStyle: String?,
 )
 
 data class Image(

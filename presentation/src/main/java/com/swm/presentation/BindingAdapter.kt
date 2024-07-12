@@ -76,8 +76,8 @@ object BindingAdapter {
                         )
                     }
 
-                    textContent?.textStyle?.forEach { style ->
-                        when (style) {
+                    textContent?.textStyle?.let {
+                        when (it) {
                             "bold" -> spannableText.setSpan(
                                 StyleSpan(Typeface.BOLD),
                                 start,
