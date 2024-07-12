@@ -10,5 +10,4 @@ class RichTextScreenDataSource @Inject constructor(
 ) {
     suspend fun getRichTextScreen(): Result<RichTextVO> = api.getRichTextScreen()
         .await()
-        .mapCatching { it }
 }

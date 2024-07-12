@@ -10,5 +10,4 @@ class ScreenDataSource @Inject constructor(
 ) {
     suspend fun getScreen(): Result<Screen> = api.getScreen()
         .await()
-        .mapCatching { it }
 }

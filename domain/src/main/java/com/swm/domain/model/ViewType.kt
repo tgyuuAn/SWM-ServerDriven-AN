@@ -10,7 +10,7 @@ enum class ViewType(
     PLUS_TITLE(Section.PlusTitleSection::class.java),
     UnKnown(Section.UnKnownSection::class.java),
 
-    // Server Driven > Rich Text 연습
+    // ✅ Server Driven > Rich Text 연습
     AViewType(ContentVO.AViewType::class.java),
     BViewType(ContentVO.BViewType::class.java),
     RichViewType(ContentVO.RichViewType::class.java),
