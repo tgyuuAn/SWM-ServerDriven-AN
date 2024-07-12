@@ -42,6 +42,7 @@ object NetworkModule {
             .build()
     }
 
+
     // 첫번째 Server Driven 과제
     @Singleton
     @Provides
@@ -77,14 +78,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    @Named("serverDrivenGson")
-    fun provideGson(contentTypeAdapter: TypeAdapter<Content>): Gson = GsonBuilder()
-        .registerTypeAdapter(Content::class.java, contentTypeAdapter)
-        .create()
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, @Named("serverDrivenGson") gson: Gson): ServerDrivenApi =
+    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): ServerDrivenApi =
         Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BASE_URL)
@@ -128,20 +122,25 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    @Named("richTextGson")
-    fun provideRichTextGson(richTextContentTypeAdapter: TypeAdapter<ContentItemVO>): Gson = GsonBuilder()
-        .registerTypeAdapter(ContentItemVO::class.java, richTextContentTypeAdapter)
-        .create()
-
-    @Singleton
-    @Provides
-    fun provideRichTextRetrofit(okHttpClient: OkHttpClient, @Named("richTextGson") gson: Gson): ServerDrivenRichTextApi =
+    fun provideRichTextRetrofit(okHttpClient: OkHttpClient, gson: Gson): ServerDrivenRichTextApi =
         Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ServerDrivenRichTextApi::class.java)
+
+
+    // ✅ TypeAdapter 2개를 하나의 Gson에서
+    @Singleton
+    @Provides
+    fun provideGson(
+        contentTypeAdapter: TypeAdapter<Content>,
+        richTextContentTypeAdapter: TypeAdapter<ContentItemVO>
+    ): Gson = GsonBuilder()
+        .registerTypeAdapter(Content::class.java, contentTypeAdapter)
+        .registerTypeAdapter(ContentItemVO::class.java, richTextContentTypeAdapter)
+        .create()
 }
 
 interface ServerDrivenApi {
