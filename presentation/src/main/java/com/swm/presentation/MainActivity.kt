@@ -10,11 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.swm.domain.model.Screen
+import com.swm.presentation.adapter.HomeContentAdapter
 import com.swm.presentation.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -22,7 +20,6 @@ class MainActivity : AppCompatActivity() {
 
     private val activityViewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var homeContentAdapter: HomeContentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,42 +28,34 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setContentView(binding.root)
 
-        binding.lifecycleOwner = this
-        binding.apply {
-            viewModel = activityViewModel
+        lifecycleScope.launch {
+            activityViewModel.apply {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    screen.collect { homeContentAdapter.setContents(it.contents) }
+                }
 
-            viewModel?.apply {
-                // 첫번째 과제
-                getScreen()
-                screen.onEach {
-                        initRecyclerView(it)
-                    }
-                    .launchIn(lifecycleScope)
-
-                // ✅ RichText 과제
-                getRichTextScreen()
-                richTextScreen.onEach {
-                        // ✅ 데이터가 잘 받아와지는지 log 찍어보는 부분입니다! presentation 구현하실 때 지우셔도 됩니다
-                        Log.d("rich text", it.toString())
-                        Log.d("rich text content 길이", it.responseData.contents.size.toString())
-                        if(it.responseData.contents.size == 3) {
-                            Log.d("rich text > RichViewType", it.responseData.contents[2].content.toString());
-                        }
-                    }
-                    .launchIn(lifecycleScope)
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    richTextScreen.collect { Log.d("test", it.toString()) }
+                }
             }
         }
+
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            viewModel = activityViewModel
+        }
+
+        initRecyclerView()
     }
 
     // Recyclerview init
-    private fun initRecyclerView(screen: Screen) {
+    private fun initRecyclerView() = binding.apply {
         homeContentAdapter = HomeContentAdapter()
-        binding.recyclerTitle.layoutManager = LinearLayoutManager(
-            this,
+        recyclerTitle.layoutManager = LinearLayoutManager(
+            this@MainActivity,
             LinearLayoutManager.VERTICAL,
             false
         )
-        binding.recyclerTitle.adapter = homeContentAdapter
-        homeContentAdapter.setContents(screen.contents)
+        recyclerTitle.adapter = homeContentAdapter
     }
 }

@@ -24,22 +24,23 @@ class MainViewModel @Inject constructor(
     private val _richTextScreen = MutableStateFlow<RichTextVO>(RichTextVO())
     val richTextScreen = _richTextScreen.asStateFlow()
 
-    fun getScreen() = viewModelScope.launch {
+    init {
+        getScreen()
+        getRichTextScreen()
+    }
+
+    private fun getScreen() = viewModelScope.launch {
         screenRepository
             .getScreen()
-            .onSuccess {
-                _screen.value = it
-            }
+            .onSuccess { _screen.value = it }
             .onFailure { Log.d("test", it.toString()) }
     }
 
     // ✅ Rich Text
-    fun getRichTextScreen() = viewModelScope.launch {
+    private fun getRichTextScreen() = viewModelScope.launch {
         richTextScreenRepository
             .getRichTextScreen()
-            .onSuccess {
-                _richTextScreen.value = it
-            }
+            .onSuccess { _richTextScreen.value = it }
             .onFailure { Log.d("RichText test fail", it.toString()) }
     }
 }
