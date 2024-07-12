@@ -12,6 +12,8 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import coil.imageLoader
+import coil.request.ImageRequest
 import com.swm.domain.model.ContentVO
 import com.swm.presentation.databinding.ViewATypeBinding
 import com.swm.presentation.databinding.ViewBTypeBinding
@@ -108,12 +110,33 @@ sealed class TypeViewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                             val start = spannableText.length
                             spannableText.append("\uFFFC") // Object replacement character
                             val end = spannableText.length
-                            spannableText.setSpan(
-                                ImageSpan(context, it),
-                                start,
-                                end,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
+
+                            val request = ImageRequest.Builder(context)
+                                .data(it) // demo link
+                                .target { drawable ->
+                                    drawable.setBounds(
+                                        0, 0, imageContent.width, imageContent.height
+                                    )
+
+                                    val start = spannableText.length
+                                    spannableText.append("1") // 이미지를 대체할 문자
+                                    val end = spannableText.length
+
+                                    // Drawable을 사용하여 ImageSpan 생성
+                                    val imageSpan = ImageSpan(drawable)
+                                    spannableText.setSpan(
+                                        imageSpan,
+                                        start,
+                                        end,
+                                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+
+                                    binding.textRich.post {
+                                        binding.textRich.text = spannableText
+                                    }
+                                }.build()
+
+                            context.imageLoader.enqueue(request)
                         }
                     }
                 }
