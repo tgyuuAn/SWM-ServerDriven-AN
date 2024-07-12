@@ -150,6 +150,6 @@ interface ServerDrivenApi {
 
 // ✅ Rich Text
 interface ServerDrivenRichTextApi {
-    @GET("api.swm-mobile.org/richtext.json")
+    @GET("api.swm-mobile.org/final-richtext.json")
     suspend fun getRichTextScreen(): Response<RichTextVO>
 }
